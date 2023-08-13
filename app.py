@@ -10,6 +10,8 @@ from keras.preprocessing import image
 from werkzeug.utils import secure_filename
 from sklearn.preprocessing import StandardScaler
 import pandas as pd
+import tensorflow as tf
+
 
 model = joblib.load('gradientBoostingClass.sav')
 modelCovid = load_model('model_adv.h5')
@@ -31,8 +33,8 @@ def predicthcc(X):
 
 def predictCovid(path):
 	
-	img = image.load_img(path, target_size=(224,224))
-	img = image.img_to_array(img) / 255.0
+	img = tf.keras.utils.load_img(path, target_size=(224,224))
+	img = tf.keras.utils.img_to_array(img) / 255.0
 	img = np.expand_dims(img, axis=0)
 	ans = (modelCovid.predict(img) > 0.5).astype("int32")
 	return ans[0][0]
